@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 import { ChakraProvider } from '@chakra-ui/react';
+import customTheme from '../styles/customTheme';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -73,7 +74,7 @@ function MyApp({ Component, pageProps }) {
         signOut,
       }}
     >
-      <ChakraProvider>
+      <ChakraProvider theme={customTheme}>
         <Nav />
         <Component {...pageProps} />
       </ChakraProvider>

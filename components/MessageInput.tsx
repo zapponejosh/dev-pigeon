@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Input } from '@chakra-ui/react';
 
 const MessageInput = ({ onSubmit }) => {
   const [messageText, setMessageText] = useState('');
@@ -14,7 +15,10 @@ const MessageInput = ({ onSubmit }) => {
 
   return (
     <>
-      <input
+      <Input
+        variant="outline"
+        color="brand.700"
+        mt="15px"
         type="text"
         placeholder="pigeons await..."
         value={messageText}

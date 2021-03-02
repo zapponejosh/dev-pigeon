@@ -14,7 +14,7 @@ const Nav = (props) => {
       alignItems="center"
       h="80px"
       p="0 20px"
-      backgroundColor="darkblue"
+      backgroundColor="#2b2a83"
     >
       <Heading as="h1" color="white">
         dev-pigeon

@@ -4,8 +4,7 @@ import { useRouter } from 'next/router';
 import { useStore, addMessage } from '../../lib/UseStore';
 import { useContext, useEffect, useRef } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-
-// import { Message as Msg } from '../../types/types';
+import Layout from '../../components/Layout';
 
 import AuthContext from '../../lib/AuthContext';
 import MessageInput from '../../components/MessageInput';
@@ -39,7 +38,7 @@ const ChannelsPage = (props) => {
   }, [messages]);
 
   return (
-    <>
+    <Layout>
       <div>
         {messages.map((x) => (
           <Message key={x.id} self={x.author.username === user.email} message={x} />
@@ -49,7 +48,7 @@ const ChannelsPage = (props) => {
       <MessageInput
         onSubmit={async (text: string) => addMessage(text, channelId, user.id)}
       />
-    </>
+    </Layout>
   );
 };
 
