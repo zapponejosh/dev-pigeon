@@ -1,26 +1,18 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './client';
 import { definitions } from '../types/supabase';
-import { RealtimeSubscription } from '@supabase/supabase-js';
+import { Message } from '../types/types';
 
-//make sure the query get turned to a number
-type appProps = { channelId: number };
+type appProps = { channelId: string };
 
-// i would like this to extend my defnititions from the db
-// interface Message extends definitions
-type Message = {
-  id: number;
-  inserted_at: string;
-  message: string;
-  user_id: string;
-  channel_id: number;
-  author: string;
-};
-
-export const useStore = (props: appProps) => {
+export const useStore = (
+  props: appProps
+): { messages: Message[]; channels: definitions['channels'][]; users } => {
   const [channels, setChannels] = useState<definitions['channels'][]>([]);
-  const [messages, setMessages] = useState<definitions['messages'][]>([]);
-  const [users] = useState(new Map());
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [users] = useState<Record<string, definitions['users']> | Record<any, any>>(
+    new Map()
+  );
   const [newMessage, handleNewMessage] = useState<definitions['messages'] | null>(
     null
   );
@@ -60,8 +52,9 @@ export const useStore = (props: appProps) => {
 
   // Update when the route changes
   useEffect(() => {
-    if (props.channelId > 0) {
-      fetchMessages(props.channelId, (messages) => {
+    if (Number(props.channelId) > 0) {
+      fetchMessages(props.channelId, (messages: Message[]) => {
+        // console.log(messages);
         messages.forEach((m) => {
           users.set(m.user_id, m.author);
         });
@@ -69,7 +62,7 @@ export const useStore = (props: appProps) => {
       });
     }
   }, [props.channelId]);
-  // New message recieved from Postgres
+  // New message recieved from Postgres (triggered by addMessage)
   useEffect(() => {
     if (newMessage && newMessage.channel_id === Number(props.channelId)) {
       const handleAsync = async (): Promise<void> => {
@@ -79,23 +72,27 @@ export const useStore = (props: appProps) => {
             handleNewOrUpdatedUser(user)
           );
         }
-        const newMessages = messages;
-        newMessages.push(newMessage);
+        // const newMessages = messages;
+        // newMessages.push(newMessage);
         setMessages(messages.concat(newMessage));
       };
       handleAsync();
     }
   }, [newMessage]);
   // New channel recieved from Postgres
-  useEffect(() => {}, [newChannel]);
+  useEffect(() => {
+    if (newChannel) setChannels(channels.concat(newChannel));
+  }, [newChannel]);
   // New or updated user recieved from Postgres
-  useEffect(() => {}, [newOrUpdatedUser]);
+  useEffect(() => {
+    if (newOrUpdatedUser) users.set(newOrUpdatedUser.id, newOrUpdatedUser);
+  }, [newOrUpdatedUser]);
 
   return {
     // We can export computed values here to map the authors to each message
-    messages: messages.map((x) => ({
-      ...x,
-      author: users.get(x.user_id),
+    messages: messages.map((m) => ({
+      ...m,
+      author: users.get(m.user_id),
     })),
     channels: channels.sort(
       (a: definitions['channels'], b: definitions['channels']) =>
@@ -131,22 +128,28 @@ export const fetchUser = async (userId: string, setState) => {
     console.log('error', error);
   }
 };
-export const fetchMessages = async (channelId: number, setState) => {
+
+export const fetchMessages = async (
+  channelId: string,
+  setState
+): Promise<Message[]> => {
   try {
-    let { body } = await supabase
-      .from<definitions['messages']>('messages')
+    const channel_id = Number(channelId);
+    let { body }: { body: Message[] } = await supabase
+      .from('messages')
       .select('*, author:user_id(*)')
-      .eq('id', channelId)
+      .eq('channel_id', channel_id)
       .order('inserted_at', { ascending: true });
 
     if (setState) setState(body);
-
+    console.log(body);
     return body;
   } catch (error) {
     console.log('error', error);
   }
 };
 export const addChannel = async (slug: string) => {
+  //TODO make max length 11ch
   try {
     let { body } = await supabase
       .from<definitions['channels']>('channels')
@@ -158,10 +161,11 @@ export const addChannel = async (slug: string) => {
 };
 export const addMessage = async (
   message: string,
-  channel_id: number,
+  channel: string,
   user_id: string
 ) => {
   try {
+    const channel_id = Number(channel);
     let { body } = await supabase
       .from<definitions['messages']>('messages')
       .insert([{ message, channel_id, user_id }]);

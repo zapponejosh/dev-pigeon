@@ -24,9 +24,10 @@ export interface definitions {
      * Note:
      * This is a Primary Key.<pk/>
      */
+    // note: message is not required at the db level. modified here to assure no empty messages are added
     id: number;
     inserted_at: string;
-    message?: string;
+    message: string;
     /**
      * Note:
      * This is a Foreign Key to `users.id`.<fk table='users' column='id'/>
@@ -50,6 +51,6 @@ export interface definitions {
      */
     id: string;
     username?: string;
-    status?: "ONLINE" | "OFFLINE";
+    status?: 'ONLINE' | 'OFFLINE';
   };
 }
