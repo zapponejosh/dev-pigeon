@@ -16,7 +16,7 @@ const Layout = (props) => {
       maxW="1000px"
       m="0 auto"
       colorScheme="brand"
-      speed="0.4"
+      speed={0.4}
       isLoaded={isLoaded}
     >
       <Box as="main" m="30px auto">
