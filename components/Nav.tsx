@@ -2,7 +2,9 @@ import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import AuthContext from '../lib/AuthContext';
 
-import { Box, Flex, Button, Heading } from '@chakra-ui/react';
+import { FaGithubSquare } from 'react-icons/fa';
+
+import { Box, Flex, Button, Heading, Icon } from '@chakra-ui/react';
 import NewChannelButton from './NewChannelButton';
 
 const Nav = (props) => {
@@ -17,9 +19,11 @@ const Nav = (props) => {
       p="0 20px"
       backgroundColor="#2b2a83"
     >
-      <Heading as="h1" color="white">
-        dev-pigeon
-      </Heading>
+      <Box as="a" href="/channels">
+        <Heading as="h1" color="white">
+          dev-pigeon
+        </Heading>
+      </Box>
 
       <Box>
         <Button m="0 10px" onClick={() => signOut()}>
@@ -38,9 +42,25 @@ const Nav = (props) => {
       p="0 20px"
       backgroundColor="darkblue"
     >
-      <Heading as="h1" color="white">
-        dev-pigeon
-      </Heading>
+      <Box as="a" href="/">
+        <Heading as="h1" color="white">
+          dev-pigeon
+        </Heading>
+      </Box>
+      <Box
+        as="a"
+        rel="noopener noreferrer"
+        target="blank"
+        href="https://github.com/zapponejosh/dev-pigeon"
+      >
+        <Icon
+          w="40px"
+          h="40px"
+          color="brand.100"
+          _hover={{ transform: 'rotate(15deg) scale(1.1)' }}
+          as={FaGithubSquare}
+        />
+      </Box>
     </Flex>
   );
 };

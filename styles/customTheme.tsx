@@ -26,7 +26,8 @@ const customTheme = extendTheme({
   // },
   colors: {
     brand: {
-      100: '##00d4ff',
+      50: '#c0eff8',
+      100: 'rgb(80, 220, 248)',
       200: '#189de3',
       300: '#2976d0',
       400: '#4040b4',
