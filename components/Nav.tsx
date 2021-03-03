@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import AuthContext from '../lib/AuthContext';
 
 import { Box, Flex, Button, Heading } from '@chakra-ui/react';
+import NewChannelButton from './NewChannelButton';
 
 const Nav = (props) => {
   const router = useRouter();
@@ -25,7 +26,7 @@ const Nav = (props) => {
           sign-out
         </Button>
 
-        <Button onClick={() => router.push('/channels')}>all-channels</Button>
+        <NewChannelButton>add-channel</NewChannelButton>
       </Box>
     </Flex>
   ) : (

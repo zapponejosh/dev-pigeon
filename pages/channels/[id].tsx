@@ -8,6 +8,7 @@ import Layout from '../../components/Layout';
 
 import AuthContext from '../../lib/AuthContext';
 import MessageInput from '../../components/MessageInput';
+import { Box, Button, Heading, Text } from '@chakra-ui/react';
 
 const ChannelsPage = (props) => {
   const router = useRouter();
@@ -28,8 +29,6 @@ const ChannelsPage = (props) => {
 
   const { messages } = useStore({ channelId });
 
-  console.log(messages);
-
   useEffect(() => {
     messagesEndRef.current.scrollIntoView({
       block: 'start',
@@ -39,12 +38,20 @@ const ChannelsPage = (props) => {
 
   return (
     <Layout>
-      <div>
+      <Button colorScheme="brand" onClick={() => router.push('/channels')}>
+        see-all-channels
+      </Button>
+      <Box h="100%" overflow="auto">
+        {!messages.length && (
+          <Heading textAlign="center" pt="80px" as="h3" color="brand.600">
+            Be the first to send a message in this channel!
+          </Heading>
+        )}
         {messages.map((x) => (
           <Message key={x.id} self={x.author.username === user.email} message={x} />
         ))}
         <div ref={messagesEndRef} style={{ height: 0 }} />
-      </div>
+      </Box>
       <MessageInput
         onSubmit={async (text: string) => addMessage(text, channelId, user.id)}
       />

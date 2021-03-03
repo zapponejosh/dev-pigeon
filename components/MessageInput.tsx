@@ -16,9 +16,11 @@ const MessageInput = ({ onSubmit }) => {
   return (
     <>
       <Input
+        h="40px"
         variant="outline"
         color="brand.700"
         mt="15px"
+        p=".8rem 1rem"
         type="text"
         placeholder="pigeons await..."
         value={messageText}

@@ -113,6 +113,7 @@ export const fetchChannels = async (setState) => {
     console.log('error', error);
   }
 };
+
 export const fetchUser = async (userId: string, setState) => {
   try {
     let { body } = await supabase
@@ -142,12 +143,12 @@ export const fetchMessages = async (
       .order('inserted_at', { ascending: true });
 
     if (setState) setState(body);
-    console.log(body);
     return body;
   } catch (error) {
     console.log('error', error);
   }
 };
+
 export const addChannel = async (slug: string) => {
   //TODO make max length 11ch
   try {
@@ -159,6 +160,7 @@ export const addChannel = async (slug: string) => {
     console.log('error', error);
   }
 };
+
 export const addMessage = async (
   message: string,
   channel: string,
