@@ -10,9 +10,11 @@ import {
   Input,
   Spinner,
   useDisclosure,
+  Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import styles from './Layout.module.css';
 
 import { addChannel } from '../lib/UseStore';
 
@@ -64,7 +66,10 @@ const NewChannelButton = (props) => {
       <PopoverTrigger>
         <Button onClick={onOpen}>{props.children}</Button>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent
+        className={styles.addChannel}
+        background="rgba(254, 254, 254, 0.3)"
+      >
         <form
           action="submit"
           onSubmit={(e) => {
@@ -73,21 +78,30 @@ const NewChannelButton = (props) => {
           }}
         >
           <Input
+            background="rgba(254, 254, 254, 0.8)"
             type="text"
             name="channel"
             value={channelName}
             onChange={(e) => setChannelName(e.target.value)}
           />
-          <Button type="submit">{props.children}</Button>
+          {spinner && <Spinner />}
+          <Text m="7px" textAlign="center">
+            {msg}
+          </Text>
+          <Button
+            display="flex"
+            justifyContent="center"
+            m="7px auto"
+            colorScheme="brand"
+            variant="outline"
+            type="submit"
+          >
+            {props.children}
+          </Button>
         </form>
-        <PopoverArrow />
+        <PopoverArrow background="brand.500" />
 
         <PopoverCloseButton />
-
-        <PopoverBody>
-          {spinner && <Spinner />}
-          {msg}
-        </PopoverBody>
       </PopoverContent>
     </Popover>
   );
