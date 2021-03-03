@@ -150,7 +150,6 @@ export const fetchMessages = async (
 };
 
 export const addChannel = async (slug: string) => {
-  //TODO make max length 11ch
   try {
     let { body } = await supabase
       .from<definitions['channels']>('channels')
